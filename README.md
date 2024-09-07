@@ -1,2 +1,2 @@
-# Sound Level Meter
- Desktop application for Sound Level Meter
+# Windows Tint Meter
+ Desktop application for Windows Tint Meter
