@@ -255,13 +255,13 @@ class ScreenMain(MDScreen):
 
             if(count_starting <= 0):
                 screen_counter.ids.lb_test_subtitle.text = "HASIL PENGUKURAN"
-                screen_counter.ids.lb_sound.text = str(np.round(dt_slm_value, 2))
+                screen_counter.ids.lb_window_tint.text = str(np.round(dt_slm_value, 2))
                 screen_counter.ids.lb_info.text = "Ambang Batas Kebisingan adalah 83 dB hingga 118 dB"
                                                
             elif(count_starting > 0):
                 if(flag_play):
                     screen_counter.ids.lb_test_subtitle.text = "MEMULAI PENGUKURAN"
-                    screen_counter.ids.lb_sound.text = str(count_starting)
+                    screen_counter.ids.lb_window_tint.text = str(count_starting)
                     screen_counter.ids.lb_info.text = "Silahkan Nyalakan Klakson Kendaraan"
 
             if(dt_slm_value >= 83 and dt_slm_value <= 118):
