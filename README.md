@@ -1,2 +1,2 @@
-# Windows Tint Meter
- Desktop application for Windows Tint Meter
+# Window Tint Meter
+ Desktop application for Window Tint Meter
