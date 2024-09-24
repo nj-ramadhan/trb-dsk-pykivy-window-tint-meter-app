@@ -1,6 +1,7 @@
 #:kivy 2.1.0
 
 #:import NoTransition kivy.uix.screenmanager.NoTransition
+#:include screen_login.kv
 #:include screen_main.kv
 #:include screen_counter.kv
 
@@ -8,7 +9,12 @@
 <RootScreen>:
     id: screen_manager
     transition: NoTransition()
-       
+
+    ScreenLogin:
+        id: screen_login
+        name: 'screen_login'
+        screen_manager: screen_manager
+
     ScreenMain:
         id: screen_main
         name: 'screen_main'
@@ -19,23 +25,3 @@
         name: 'screen_counter'
         screen_manager: screen_manager   
 
-<ContentLogin>
-    orientation: "vertical"
-    spacing: "8dp"
-    size_hint_y: None
-    height: "180dp"
-
-    MDTextField:
-        id: tx_username
-        hint_text: "Nama Pengguna"
-
-    MDTextField:
-        id: tx_password
-        hint_text: "Password"
-        password: True
-
-    MDRectangleFlatIconButton:
-        id: bt_login
-        icon: "check"
-        text:"MASUK"
-        on_press: root.exec_login()

@@ -46,14 +46,15 @@
 				orientation: "vertical"
 				size_hint_x: 0.15
 
-				MDIconButton:
-					id: bt_shutdown
-					icon: "power"
+				MDRectangleFlatIconButton:
+					id: bt_logout
+					icon: "logout"
+					text: "LOGOUT"
 					md_bg_color: "#FF2A2A"
 					theme_text_color: "Custom"
 					text_color: "#EEEEEE"
 					size_hint_x: 1
-					on_press: root.exec_shutdown()
+					on_press: root.exec_logout()
 
 				MDLabel:
 					id: lb_time
@@ -73,16 +74,14 @@
 					theme_text_color: "Custom"
 					text_color: "#FFFFFF"
 
-
-				MDRectangleFlatIconButton:
-					id: bt_operator
-					text: "Silahkan Login"
-					icon: "login"
+				MDLabel:
+					id: lb_operator
+					text: "Nama Operator"
+					halign: "center"
+					valign: "middle"
+					font_style: 'H6'
 					theme_text_color: "Custom"
-					text_color: "#EEEEEE"
-					md_bg_color: "4471C4"
-					size_hint_x: 1
-					on_press: root.show_login_dialog()
+					text_color: "#FFFFFF"
 
 				MDLabel:
 					id: lb_comm
@@ -281,7 +280,7 @@
 						md_bg_color: "#EEEEEE"
 						theme_text_color: "Custom"
 						text_color: "#000000"
-						font_style: 'Subtitle2'
+						font_style: 'Subtitle1'
 
 			MDBoxLayout:
 				orientation: "vertical"
