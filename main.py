@@ -1,3 +1,4 @@
+from threading import TIMEOUT_MAX
 from kivy.clock import Clock
 from kivy.lang import Builder
 from kivy.core.window import Window
@@ -84,6 +85,7 @@ TB_USER = config['mysql']['TB_USER']
 
 COM_PORT_PRINTER = config['device']['COM_PORT_PRINTER']
 COM_PORT_WTM = config['device']['COM_PORT_WTM']
+TIMEOUT_MAX = 500
 
 FORMAT = pyaudio.paInt16
 CHANNELS = 2
@@ -387,16 +389,25 @@ class ScreenMain(MDScreen):
                 data_byte = wtm_device.readline().decode("utf-8").strip()  # read the incoming data and remove newline character
                 if data_byte != "":
                     print(data_byte)
-                    if(data_byte == "78 80 78 80 78 0 0 78 78 0 0"):
+                    arr_data_byte = data_byte.split()
+                    print(arr_data_byte)
+
+                    if(data_byte   == "78 0 0 0 80 78 80 78 80 78 80 78 0 0 78 78 0 0 0 0 0"):
                         dt_wtm_value = 0    
-                    elif(data_byte == "78 F8 0 0 F8 0 78 0 80 F8 0"):
+                    elif(data_byte == "78 0 0 0 80 78 80 78 F8 0 0 F8 0 78 0 80 F8 0 0 0 0 0"):
                         dt_wtm_value = 30.7 
-                    elif(data_byte == "78 F8 0 0 0 0 78 78 80 F8 0"):
+                    elif(data_byte == "78 0 0 0 80 78 80 78 F8 0 0 0 0 78 78 80 F8 0 0 0 0 0"):
                         dt_wtm_value = 30.8                         
-                    elif(data_byte == "78 F8 0 0 78 0 78 80 78 F8 0"):
+                    elif(data_byte == "78 0 0 0 80 78 80 78 F8 0 0 78 0 78 80 78 F8 0 0 0 0"):
                         dt_wtm_value = 30.9                         
-                    elif(data_byte == "78 78 0 0 0 80 80 0 0 0 0"):
+                    elif(data_byte == "78 0 0 0 80 78 80 78 78 0 78 0 F8 80 0 0 0 0 0 0 0"):
+                        dt_wtm_value = 99.9                         
+                    elif(data_byte == "78 0 0 0 80 78 80 78 78 0 0 0 80 80 0 0 0 0 0 0 0"):
                         dt_wtm_value = 100 
+                    else:
+                        dt_wtm_value = 0
+                        toast("Unknown data")
+
                 
                 flag_play = False
                 Clock.unschedule(self.regular_get_data)
