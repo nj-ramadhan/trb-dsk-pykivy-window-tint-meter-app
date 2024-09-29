@@ -386,38 +386,20 @@ class ScreenMain(MDScreen):
                 # Clock.unschedule(self.regular_get_data)
 
             # if(count_starting <= 0):
+                arr_ref = np.loadtxt("data\sample_data.csv", delimiter=";", dtype=str, skiprows=1)
+                arr_val_ref = arr_ref[:,0]
+                arr_data_ref = arr_ref[:,1:]
+
                 data_byte = wtm_device.readline().decode("utf-8").strip()  # read the incoming data and remove newline character
                 if data_byte != "":
-                    print(data_byte)
-                    arr_data_byte = data_byte.split()
-                    print(arr_data_byte)
+                    arr_data_byte = np.array(data_byte.split())
 
-                    if(data_byte   == "78 0 0 0 80 78 80 78 80 78 80 78 0 0 78 78 0 0 0 0 0"):
-                        dt_wtm_value = 0    
-                    elif(data_byte == "78 0 0 0 80 78 80 78 F8 0 0 F8 0 78 0 80 F8 0 0 0 0 0"):
-                        dt_wtm_value = 30.7 
-                    elif(data_byte == "78 0 0 0 80 78 80 78 F8 0 0 0 0 78 78 80 F8 0 0 0 0 0"):
-                        dt_wtm_value = 30.8                         
-                    elif(data_byte == "78 0 0 0 80 78 80 78 F8 0 0 78 0 78 80 78 F8 0 0 0 0"):
-                        dt_wtm_value = 30.9                         
-                    elif(data_byte == "78 0 0 0 80 78 80 78 78 0 78 0 F8 80 0 0 0 0 0 0 0"):
-                        dt_wtm_value = 99.9                         
-                    elif(data_byte == "78 0 0 0 80 78 80 78 78 0 0 0 80 80 0 0 0 0 0 0 0"):
-                        dt_wtm_value = 100 
-                    else:
-                        dt_wtm_value = 0
-                        toast("Unknown data")
-
+                    for i in range(arr_val_ref.size):
+                        if(np.array_equal(arr_data_byte, arr_data_ref[i])):
+                            dt_wtm_value = float(arr_val_ref[i])
                 
                 flag_play = False
                 Clock.unschedule(self.regular_get_data)
-
-
-                    # flag_play = False
-                    # Clock.unschedule(self.regular_get_data)
-                # elif(data_byte == b'0 0 80 78 80 78 78 0 0 0 80 80'):
-                #     measure_val = 100
-                # dt_wtm_value = float(data_byte)
 
         except Exception as e:
             toast_msg = f'error get data: {e}'
@@ -481,13 +463,15 @@ class ScreenCounter(MDScreen):
 
     def exec_reload(self):
         global flag_play
-        global count_starting, count_get_data
+        global count_starting, count_get_data, dt_wtm_value
 
         screen_main = self.screen_manager.get_screen('screen_main')
 
         count_starting = 3
         count_get_data = 10
+        dt_wtm_value = 0
         self.ids.bt_reload.disabled = True
+        self.ids.lb_window_tint.text = "..."
 
         if(not flag_play):
             stream.start_stream()
