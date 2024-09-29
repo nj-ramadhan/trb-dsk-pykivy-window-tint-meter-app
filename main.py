@@ -1,4 +1,3 @@
-from threading import TIMEOUT_MAX
 from kivy.clock import Clock
 from kivy.lang import Builder
 from kivy.core.window import Window
@@ -14,12 +13,8 @@ from kivy.metrics import dp
 from kivymd.toast import toast
 import numpy as np
 import time
-import os
-import pyaudio
-from math import log10
-import audioop  
 import mysql.connector
-from escpos.printer import Serial
+from escpos.printer import Serial as printerSerial
 import configparser
 import serial.tools.list_ports as ports
 import hashlib
@@ -85,14 +80,7 @@ TB_USER = config['mysql']['TB_USER']
 
 COM_PORT_PRINTER = config['device']['COM_PORT_PRINTER']
 COM_PORT_WTM = config['device']['COM_PORT_WTM']
-TIMEOUT_MAX = 500
-
-FORMAT = pyaudio.paInt16
-CHANNELS = 2
-RATE = 44100
-CHUNK = 1024
-RECORD_SECONDS = 0.8
-WIDTH = 2
+TIME_OUT = 500
 
 dt_wtm_value = 0
 dt_wtm_flag = 0
@@ -175,10 +163,6 @@ class ScreenMain(MDScreen):
             database = DB_NAME
             )
 
-            audio = pyaudio.PyAudio() # start the PyAudio class
-            stream = audio.open(format=FORMAT,channels=CHANNELS,rate=RATE,input=True,
-                    frames_per_buffer=CHUNK) #uses default input device
-
         except Exception as e:
             toast_msg = f'error initiate Database: {e}'
             toast(toast_msg)           
@@ -193,13 +177,13 @@ class ScreenMain(MDScreen):
                 if i.name == COM_PORT_PRINTER:
                     flag_conn_stat = True
 
-            # printer = Serial(devfile = COM_PORT_PRINTER,
-            #         baudrate = 38400,
-            #         bytesize = 8,
-            #         parity = 'N',
-            #         stopbits = 1,
-            #         timeout = 1.00,
-            #         dsrdtr = True)    
+            printer = printerSerial(devfile = COM_PORT_PRINTER,
+                    baudrate = 38400,
+                    bytesize = 8,
+                    parity = 'N',
+                    stopbits = 1,
+                    timeout = 1.00,
+                    dsrdtr = True)    
 
             wtm_device = serial.Serial()
             wtm_device.baudrate = 115200
@@ -499,7 +483,7 @@ class ScreenCounter(MDScreen):
         mydb.commit()
 
         printer.set(align="center", normal_textsize=True)
-        printer.image("asset/logo-dishub-print.png")
+        printer.image("assets/logo-dishub-print.png")
         printer.ln()
         printer.textln("HASIL UJI TINGKAT PENERUSAN CAHAYA KACA KENDARAAN")
         printer.set(bold=True)
@@ -522,7 +506,7 @@ class ScreenCounter(MDScreen):
         printer.textln(f"{str(np.round(dt_wtm_value, 2))}")
         printer.set(align="center", normal_textsize=True)     
         printer.textln("  ")
-        printer.image("asset/logo-trb-print.png")
+        printer.image("assets/logo-trb-print.png")
         printer.cut()
 
         self.open_screen_main()
@@ -554,11 +538,11 @@ class SoundLevelMeterApp(MDApp):
         self.theme_cls.primary_palette = "Gray"
         self.theme_cls.accent_palette = "Blue"
         self.theme_cls.theme_style = "Light"
-        self.icon = 'asset/logo.png'
+        self.icon = 'assets/logo.png'
 
         LabelBase.register(
             name="Orbitron-Regular",
-            fn_regular="asset/font/Orbitron-Regular.ttf")
+            fn_regular="assets/fonts/Orbitron-Regular.ttf")
 
         theme_font_styles.append('Display')
         self.theme_cls.font_styles["Display"] = [
