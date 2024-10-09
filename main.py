@@ -6,8 +6,6 @@ from kivymd.font_definitions import theme_font_styles
 from kivymd.uix.datatables import MDDataTable
 from kivy.uix.screenmanager import ScreenManager
 from kivymd.uix.screen import MDScreen
-from kivymd.uix.dialog import MDDialog
-from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.app import MDApp
 from kivy.metrics import dp
 from kivymd.toast import toast

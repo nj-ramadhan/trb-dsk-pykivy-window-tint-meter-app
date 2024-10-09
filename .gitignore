@@ -1,7 +1,5 @@
 # Ignore the virtual environment folder
 venv/
-# or, if you used a different name for your virtual environment, specify that name
-# myenv/
 
 # Ignore PyInstaller build and distribution folders
 /build/
